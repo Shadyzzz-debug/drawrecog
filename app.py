@@ -11,66 +11,81 @@ import numpy as np
 # --- Configuraciones del LLM para el entorno ---
 GEMINI_CHAT_MODEL = "gemini-2.5-flash-preview-09-2025" 
 
-# --- CSS BASE (Estilo Limpio para Dibujo) ---
+# --- CSS MÍSTICO / ENIGMÁTICO (Azul Profundo y Oro) ---
 base_css = """
 <style>
 /* Reset básico para Streamlit */
 .stApp {
-    background-color: #F8F8F8;
-    color: #333333;
-    font-family: Arial, sans-serif;
+    background-color: #0E1A2B; /* Azul profundo / medianoche */
+    color: #E6E6E6; /* Tono pergamino o plata */
+    font-family: 'Georgia', serif; 
 }
 
 h1 {
-    color: #2C3E50;
+    color: #FFD700; /* Oro */
     text-align: center;
-    border-bottom: 2px solid #3498DB;
+    border-bottom: 3px solid #34495E; /* Borde de acero */
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    letter-spacing: 1.5px;
+    text-shadow: 2px 2px 4px #000000;
 }
 
 h3 {
-    color: #34495E;
+    color: #C0C0C0; /* Plata */
+    margin-top: 25px;
+    font-weight: normal;
 }
 
-/* Contenedores de entrada/salida */
+/* Contenedores de entrada/salida (Pergamino) */
 div[data-testid="stTextInput"], div[data-testid="stTextarea"] {
-    background-color: #ECF0F1;
+    background-color: #1A2C3E; /* Azul oscuro acentuado */
+    border: 1px solid #FFD700;
     border-radius: 5px;
     padding: 10px;
+    color: #F0F0F0;
 }
 
-/* Botones (Estilo Moderno) */
+/* Sidebar */
+.css-1d3w5ta, .css-1lcbmhc {
+    background-color: #152438;
+    color: #C0C0C0;
+}
+
+/* Botones (Sello de Convocación) */
 .stButton>button {
-    background-color: #3498DB; /* Azul Brillante */
-    color: white;
-    border: none;
-    padding: 10px 20px;
+    background-color: #34495E; /* Acero/Pizarra */
+    color: #FFD700; /* Texto Dorado */
+    border: 2px solid #FFD700; /* Borde Dorado */
+    padding: 10px 25px;
     font-weight: bold;
-    border-radius: 5px;
-    transition: all 0.2s;
-    box-shadow: 0 4px #2980B9;
+    border-radius: 10px;
+    transition: all 0.3s;
+    box-shadow: 0 5px #1A2C3E;
+    letter-spacing: 1px;
 }
 
 .stButton>button:hover {
-    background-color: #2980B9;
-    box-shadow: 0 6px #1F618D;
+    background-color: #4A637F; /* Ligeramente más claro */
+    box-shadow: 0 8px #0E1A2B;
     transform: translateY(-2px);
 }
 
 .stButton>button:active {
-    box-shadow: 0 2px #1F618D;
+    box-shadow: 0 2px #0E1A2B;
     transform: translateY(2px);
 }
 
-/* Placeholder para la respuesta */
+/* Placeholder para la respuesta (Piedra Revelada) */
 div[data-testid="stMarkdownContainer"] {
-    background-color: #FFFFFF;
+    background-color: #1A2C3E;
     padding: 20px;
-    border: 1px solid #BDC3C7;
-    border-radius: 5px;
-    margin-top: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    margin-top: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    color: #E6E6E6;
 }
 </style>
 """
@@ -151,24 +166,24 @@ def get_gemini_vision_answer(base64_image: str, mime_type: str, user_prompt: str
 
 # --- Streamlit App Setup ---
 st.set_page_config(page_title='Tablero Inteligente', layout="centered")
-st.title('Tablero Inteligente con Visión Gemini')
+st.title('Tablero Místico de la Clarividencia')
 
 # --- Sidebar para Controles ---
 with st.sidebar:
-    st.subheader("Acerca de:")
-    st.markdown("Esta aplicación interpreta bocetos dibujados en el panel usando la **Gemini API**.")
+    st.subheader("El Scriptorium")
+    st.markdown("Este antiguo Tablero Místico invoca la **Visión de Géminis** para interpretar tus trazos. Cada línea es un conjuro.")
     st.markdown("---")
     
-    st.subheader("Configuración del Boceto")
+    st.subheader("Trazo del Augurio")
     drawing_mode = "freedraw"
-    stroke_width = st.slider('Selecciona el ancho de línea', 1, 30, 5)
+    stroke_width = st.slider('Define la Potencia del Trazo', 1, 30, 5)
 
 # --- Canvas Principal ---
-st.subheader("Dibuja el boceto en el panel y presiona el botón para analizarlo")
+st.subheader("Traza el Símbolo o Visión en el Lienzo")
 
 # Canvas Parameters
-stroke_color = "#000000"  # Línea negra
-bg_color = '#FFFFFF'     # Fondo blanco
+stroke_color = "#000000"  # Tinta Negra
+bg_color = '#FFFFFF'     # Fondo Pergamino Blanco
 
 # Create a canvas component
 canvas_result = st_canvas(
@@ -176,22 +191,22 @@ canvas_result = st_canvas(
     stroke_width=stroke_width,
     stroke_color=stroke_color,
     background_color=bg_color,
-    height=300,
-    width=400,
+    height=350, # Aumento de altura
+    width=500,  # Aumento de ancho
     drawing_mode=drawing_mode,
     key="canvas_intelligent",
 )
 
 # --- Controles de la API y Análisis ---
-ke = st.text_input('Ingresa tu Clave API (Gemini Key)', type="password")
+ke = st.text_input('Ingresa la Llave Arcaica (Gemini Key)', type="password")
 
 additional_details = st.text_area(
-    "Instrucción de Análisis Adicional:",
-    placeholder="Ej: Describe brevemente la imagen o clasifica el objeto dibujado.",
-    value="Describe en español y de forma concisa el objeto o concepto que has identificado en el boceto."
+    "Fórmula de Invocación (Instrucción de Análisis):",
+    placeholder="Ej: Describe la arquitectura de este diseño. O, ¿Qué criatura he dibujado?",
+    value="Describe en español y con un tono formal y solemne el objeto, concepto o símbolo que has identificado en este trazo místico. Usa lenguaje evocador."
 )
 
-analyze_button = st.button("Analiza la Imagen", type="primary")
+analyze_button = st.button("Revela el Significado del Símbolo", type="primary")
 
 
 # --- Lógica de Análisis ---
@@ -199,18 +214,30 @@ if canvas_result.image_data is not None and analyze_button:
     
     # 1. Validación
     if not ke:
-        st.warning("Por favor, ingresa tu Clave API de Gemini.")
+        st.error("La Llave Arcaica (API Key) es necesaria para desvelar el significado.")
         st.stop()
         
     # Verificar si el dibujo está vacío
-    if not canvas_result.image_data.any():
-        st.warning("El lienzo está en blanco. Por favor, dibuja un boceto para analizar.")
+    # Verifica si todos los valores de los canales R, G, B son el color de fondo (blanco en este caso)
+    # st_canvas retorna una imagen RGBA
+    image_array = np.array(canvas_result.image_data)
+    # Comprobar si hay algo que no sea blanco puro (255, 255, 255, 255)
+    # Se ignora el canal alfa ya que puede variar en las áreas no dibujadas, 
+    # pero nos enfocamos en que los RGB no sean todos 255 (blanco).
+    is_blank = np.all(image_array[:, :, :3] == 255)
+    if is_blank:
+        st.warning("El Lienzo del Augurio está vacío. Por favor, traza una visión.")
         st.stop()
 
-    with st.spinner("Analizando el boceto con Visión Gemini..."):
+
+    with st.spinner("El Tablero Místico está procesando la visión..."):
         try:
             # 2. Preparar la Imagen (Codificación Base64)
+            # El array RGBA debe ser convertido a RGB antes de guardar/enviar, 
+            # ya que el fondo del canvas es blanco y el trazo es negro.
             input_numpy_array = np.array(canvas_result.image_data)
+            # Convertir a RGB, ya que el modelo Gemini generalmente funciona mejor con RGB.
+            # Esto ignora el canal Alfa que es 255 en áreas no dibujadas y 255 en el trazo negro (opaco).
             input_image = Image.fromarray(input_numpy_array.astype('uint8'), 'RGBA').convert('RGB')
             
             # Guardar en memoria como PNG para Base64
@@ -228,11 +255,12 @@ if canvas_result.image_data is not None and analyze_button:
             response = get_gemini_vision_answer(base64_image, mime_type, prompt_text, ke)
             
             # 5. Mostrar la Respuesta
-            st.markdown("### Resultado del Análisis:")
+            st.markdown("### 🔮 El Verbo de Géminis:")
             st.markdown(response)
             
         except Exception as e:
-            st.error(f"Error durante la Invocación a la API: {e}")
+            st.error(f"Error durante la Invocación. La Visión fue bloqueada: {e}")
             
 elif analyze_button:
-    st.warning("Asegúrate de haber dibujado algo y de haber ingresado tu Clave API.")
+    # Se cubre si se presiona sin clave o sin dibujo. La clave se verifica antes con un st.error.
+    st.info("A la espera del trazo y la Llave Arcaica para la revelación.")
