@@ -9,83 +9,110 @@ from streamlit_drawable_canvas import st_canvas
 import numpy as np
 
 # --- Configuraciones del LLM para el entorno ---
+# Se mantiene el modelo flash para optimizar velocidad de respuesta de la visión.
 GEMINI_CHAT_MODEL = "gemini-2.5-flash-preview-09-2025" 
 
-# --- CSS MÍSTICO / ENIGMÁTICO (Azul Profundo y Oro) ---
+# --- CSS PESADILLA GÓTICA (Referencia Bloodborne: Azul Oscuro, Bronce, Tinta y Sangre) ---
 base_css = """
 <style>
-/* Reset básico para Streamlit */
+/* ---------------------------------------------------- */
+/* RESET Y FONDO AMBIENTAL */
+/* ---------------------------------------------------- */
 .stApp {
-    background-color: #0E1A2B; /* Azul profundo / medianoche */
-    color: #E6E6E6; /* Tono pergamino o plata */
+    /* Color de la noche de Yharnam o la Pesadilla: Azul/Negro muy oscuro. */
+    background-color: #0F0F1A; 
+    color: #C0C0C0; /* Texto de pergamino antiguo */
     font-family: 'Georgia', serif; 
 }
 
+/* ---------------------------------------------------- */
+/* TIPOGRAFÍA Y ENCABEZADOS */
+/* ---------------------------------------------------- */
 h1 {
-    color: #FFD700; /* Oro */
+    /* Titular: Bronce envejecido o Oro oscuro */
+    color: #9C7E4F; 
     text-align: center;
-    border-bottom: 3px solid #34495E; /* Borde de acero */
+    /* Borde inferior como una reja forjada */
+    border-bottom: 3px solid #4F4A5E; 
     padding-bottom: 10px;
-    margin-bottom: 30px;
-    font-size: 2.5em;
-    letter-spacing: 1.5px;
-    text-shadow: 2px 2px 4px #000000;
+    margin-bottom: 40px;
+    font-size: 2.8em;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 5px #000000;
 }
 
 h3 {
-    color: #C0C0C0; /* Plata */
+    /* Subtítulos: Gris pizarra o plata mate */
+    color: #A9A9A9; 
     margin-top: 25px;
     font-weight: normal;
+    border-left: 4px solid #9C7E4F; /* Acento Bronce */
+    padding-left: 10px;
 }
 
-/* Contenedores de entrada/salida (Pergamino) */
+/* ---------------------------------------------------- */
+/* ELEMENTOS DE ENTRADA (Cajas de Inscripción) */
+/* ---------------------------------------------------- */
 div[data-testid="stTextInput"], div[data-testid="stTextarea"] {
-    background-color: #1A2C3E; /* Azul oscuro acentuado */
-    border: 1px solid #FFD700;
+    /* Fondo de pizarra oscura */
+    background-color: #1A1A2A; 
+    /* Borde fino de bronce */
+    border: 1px solid #9C7E4F;
     border-radius: 5px;
     padding: 10px;
-    color: #F0F0F0;
+    color: #E6E6E6;
 }
 
-/* Sidebar */
+/* Sidebar (El Sueño del Cazador) */
 .css-1d3w5ta, .css-1lcbmhc {
-    background-color: #152438;
+    background-color: #151525;
     color: #C0C0C0;
 }
 
-/* Botones (Sello de Convocación) */
+/* ---------------------------------------------------- */
+/* BOTONES (Sello de Invocación) */
+/* ---------------------------------------------------- */
 .stButton>button {
-    background-color: #34495E; /* Acero/Pizarra */
-    color: #FFD700; /* Texto Dorado */
-    border: 2px solid #FFD700; /* Borde Dorado */
-    padding: 10px 25px;
+    /* Acero oscuro, base de la Rueda de la Convocación */
+    background-color: #383850; 
+    /* Texto: Letras rúnicas en rojo sangre */
+    color: #B22222; 
+    /* Borde: Acento de metal forjado */
+    border: 2px solid #9C7E4F; 
+    padding: 12px 30px;
     font-weight: bold;
     border-radius: 10px;
     transition: all 0.3s;
-    box-shadow: 0 5px #1A2C3E;
+    /* Sombra profunda */
+    box-shadow: 0 6px #1A1A2A; 
     letter-spacing: 1px;
 }
 
 .stButton>button:hover {
-    background-color: #4A637F; /* Ligeramente más claro */
-    box-shadow: 0 8px #0E1A2B;
-    transform: translateY(-2px);
+    background-color: #4F4F6A; 
+    box-shadow: 0 10px #0F0F1A;
+    transform: translateY(-3px);
 }
 
 .stButton>button:active {
-    box-shadow: 0 2px #0E1A2B;
-    transform: translateY(2px);
+    box-shadow: 0 3px #0F0F1A;
+    transform: translateY(3px);
 }
 
-/* Placeholder para la respuesta (Piedra Revelada) */
+/* ---------------------------------------------------- */
+/* RESPUESTA (Papiro de la Revelación) */
+/* ---------------------------------------------------- */
 div[data-testid="stMarkdownContainer"] {
-    background-color: #1A2C3E;
-    padding: 20px;
-    border: 2px solid #FFD700;
+    /* Fondo: Papel antiguo sobre mesa de madera oscura */
+    background-color: #24243A; 
+    padding: 25px;
+    /* Borde: Un sello de cera escarlata */
+    border: 3px solid #B22222; 
     border-radius: 8px;
-    margin-top: 25px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    margin-top: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.7);
     color: #E6E6E6;
+    line-height: 1.6;
 }
 </style>
 """
@@ -165,25 +192,25 @@ def get_gemini_vision_answer(base64_image: str, mime_type: str, user_prompt: str
 
 
 # --- Streamlit App Setup ---
-st.set_page_config(page_title='Tablero Inteligente', layout="centered")
-st.title('Tablero Místico de la Clarividencia')
+st.set_page_config(page_title='El Lienzo del Oráculo', layout="centered")
+st.title('🌌 El Lienzo del Oráculo: Desentrañando la Pesadilla')
 
-# --- Sidebar para Controles ---
+# --- Sidebar (El Sueño del Cazador) ---
 with st.sidebar:
-    st.subheader("El Scriptorium")
-    st.markdown("Este antiguo Tablero Místico invoca la **Visión de Géminis** para interpretar tus trazos. Cada línea es un conjuro.")
+    st.subheader("El Scriptorium Arcaico")
+    st.markdown("Este Lienzo, imbuido del poder de la **Visión de Géminis**, permite transcribir tus símbolos más profundos para buscar un significado oculto. Cada trazo es una oración en la noche de la cacería.")
     st.markdown("---")
     
-    st.subheader("Trazo del Augurio")
+    st.subheader("La Sangre del Trazo")
     drawing_mode = "freedraw"
-    stroke_width = st.slider('Define la Potencia del Trazo', 1, 30, 5)
+    stroke_width = st.slider('Define la Potencia de la Runa', 1, 30, 5)
 
 # --- Canvas Principal ---
-st.subheader("Traza el Símbolo o Visión en el Lienzo")
+st.subheader("Graba tu Símbolo o Visión en el Papiro")
 
 # Canvas Parameters
-stroke_color = "#000000"  # Tinta Negra
-bg_color = '#FFFFFF'     # Fondo Pergamino Blanco
+stroke_color = "#000000"  # Tinta Negra (o sangre seca)
+bg_color = '#FFFFFF'     # Fondo Pergamino Blanco (para el contraste necesario)
 
 # Create a canvas component
 canvas_result = st_canvas(
@@ -191,22 +218,23 @@ canvas_result = st_canvas(
     stroke_width=stroke_width,
     stroke_color=stroke_color,
     background_color=bg_color,
-    height=350, # Aumento de altura
-    width=500,  # Aumento de ancho
+    height=350, 
+    width=500, 
     drawing_mode=drawing_mode,
     key="canvas_intelligent",
 )
 
 # --- Controles de la API y Análisis ---
-ke = st.text_input('Ingresa la Llave Arcaica (Gemini Key)', type="password")
+ke = st.text_input('Incrusta la Llave de la Revelación (Gemini Key)', type="password", 
+                    help="La llave arcaica es vital para invocar la percepción de la entidad de Géminis.")
 
 additional_details = st.text_area(
-    "Fórmula de Invocación (Instrucción de Análisis):",
-    placeholder="Ej: Describe la arquitectura de este diseño. O, ¿Qué criatura he dibujado?",
-    value="Describe en español y con un tono formal y solemne el objeto, concepto o símbolo que has identificado en este trazo místico. Usa lenguaje evocador."
+    "Fórmula de Invocación (Pregunta al Cosmos):",
+    placeholder="Ej: ¿Qué bestia ancestral representa este boceto? O, Describe el diseño de esta arma.",
+    value="Con la solemnidad debida a los Antiguos, describe en español y de forma concisa el objeto, criatura o concepto que has identificado en este trazo místico. Usa un lenguaje formal y evocador, apropiado para un documento esotérico."
 )
 
-analyze_button = st.button("Revela el Significado del Símbolo", type="primary")
+analyze_button = st.button("Activa el Ojo Interno (Revela el Significado)", type="primary")
 
 
 # --- Lógica de Análisis ---
@@ -214,33 +242,25 @@ if canvas_result.image_data is not None and analyze_button:
     
     # 1. Validación
     if not ke:
-        st.error("La Llave Arcaica (API Key) es necesaria para desvelar el significado.")
+        st.error("🩸 La Llave de la Revelación es necesaria. El Rito no puede continuar sin ella.")
         st.stop()
         
-    # Verificar si el dibujo está vacío
-    # Verifica si todos los valores de los canales R, G, B son el color de fondo (blanco en este caso)
-    # st_canvas retorna una imagen RGBA
+    # 2. Verificar si el dibujo está vacío
     image_array = np.array(canvas_result.image_data)
-    # Comprobar si hay algo que no sea blanco puro (255, 255, 255, 255)
-    # Se ignora el canal alfa ya que puede variar en las áreas no dibujadas, 
-    # pero nos enfocamos en que los RGB no sean todos 255 (blanco).
+    # Comprobar si los canales RGB no son todos 255 (blanco).
     is_blank = np.all(image_array[:, :, :3] == 255)
     if is_blank:
-        st.warning("El Lienzo del Augurio está vacío. Por favor, traza una visión.")
+        st.warning("🕯️ El Lienzo está en blanco. No has ofrecido ninguna Visión al Oráculo.")
         st.stop()
 
 
-    with st.spinner("El Tablero Místico está procesando la visión..."):
+    with st.spinner("La mente del Cazador se adentra en la Pesadilla para buscar la verdad..."):
         try:
-            # 2. Preparar la Imagen (Codificación Base64)
-            # El array RGBA debe ser convertido a RGB antes de guardar/enviar, 
-            # ya que el fondo del canvas es blanco y el trazo es negro.
+            # 3. Preparar la Imagen (Codificación Base64)
             input_numpy_array = np.array(canvas_result.image_data)
-            # Convertir a RGB, ya que el modelo Gemini generalmente funciona mejor con RGB.
-            # Esto ignora el canal Alfa que es 255 en áreas no dibujadas y 255 en el trazo negro (opaco).
             input_image = Image.fromarray(input_numpy_array.astype('uint8'), 'RGBA').convert('RGB')
             
-            # Guardar en memoria como PNG para Base64
+            # Guardar en memoria como PNG
             buf = io.BytesIO()
             input_image.save(buf, format='PNG')
             file_bytes = buf.getvalue()
@@ -248,19 +268,19 @@ if canvas_result.image_data is not None and analyze_button:
             base64_image = base64.b64encode(file_bytes).decode("utf-8")
             mime_type = 'image/png'
 
-            # 3. Construir el Prompt
+            # 4. Construir el Prompt
             prompt_text = additional_details
             
-            # 4. Invocar la Visión (Usando la función con requests)
+            # 5. Invocar la Visión (Usando la función con requests)
             response = get_gemini_vision_answer(base64_image, mime_type, prompt_text, ke)
             
-            # 5. Mostrar la Respuesta
-            st.markdown("### 🔮 El Verbo de Géminis:")
+            # 6. Mostrar la Respuesta
+            st.markdown("### 📜 La Tablilla de la Verdad:")
             st.markdown(response)
             
         except Exception as e:
-            st.error(f"Error durante la Invocación. La Visión fue bloqueada: {e}")
+            st.error(f"💀 Error en el Rito. La Visión fue bloqueada por fuerzas desconocidas: {e}")
             
 elif analyze_button:
-    # Se cubre si se presiona sin clave o sin dibujo. La clave se verifica antes con un st.error.
-    st.info("A la espera del trazo y la Llave Arcaica para la revelación.")
+    st.info("🌙 La noche es larga. Graba tu símbolo y ten la Llave de la Revelación a mano.")
+
